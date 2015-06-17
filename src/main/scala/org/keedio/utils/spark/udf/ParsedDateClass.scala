@@ -35,9 +35,7 @@ object UDF {
   def to_date(inputbox : String) : Timestamp = {
 
     val dateFormated = new SimpleDateFormat("yyyy-MM-dd HH:mm")
-    try {
-      new Timestamp(dateFormated.parse(inputbox).getTime())
-    }
+    new Timestamp(dateFormated.parse(inputbox).getTime())
 
   }
 
