@@ -7,7 +7,7 @@
     <groupId>org.keedio.utils</groupId>
     <artifactId>spark-sql-udfs</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -63,8 +63,21 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
                     </execution>
                 </executions>
+
             </plugin>
 
         </plugins>

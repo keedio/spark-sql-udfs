@@ -24,9 +24,9 @@ object REGEX {
 
   }
 
-  def isSign(inputbox : String) : Boolean = {inputbox == "-"}
+  def isSign(inputbox : String) : Boolean = {if(inputbox != null) true else false}
   def isNumeric(inputbox: String): Boolean = {if (inputbox != null) inputbox.forall(_.isDigit) else false}
-  def isField(inputbox : String) : Boolean = List("d","h","m","s").contains(inputbox)
+  def isField(inputbox : String) : Boolean = List("y","M","d","h","m","s").contains(inputbox)
 
 }
 
@@ -45,10 +45,12 @@ object UDF {
 
     fieldCase match {
 
-      case "d" => cal.add(java.util.Calendar.DATE, -numberCase)
-      case "h" => cal.add(java.util.Calendar.HOUR, -numberCase)
-      case "m" => cal.add(java.util.Calendar.MINUTE, -numberCase)
-      case "s" => cal.add(java.util.Calendar.SECOND, -numberCase)
+      case "y" => cal.add(java.util.Calendar.YEAR, numberCase)
+      case "M" => cal.add(java.util.Calendar.MONTH, numberCase)
+      case "d" => cal.add(java.util.Calendar.DATE, numberCase)
+      case "h" => cal.add(java.util.Calendar.HOUR, numberCase)
+      case "m" => cal.add(java.util.Calendar.MINUTE, numberCase)
+      case "s" => cal.add(java.util.Calendar.SECOND, numberCase)
 
     }
 
@@ -58,23 +60,24 @@ object UDF {
 
 }
 
-class ParsedDateClass {
+trait ParsedDateClass {
 
   def parsedDate(inputbox : String) : Timestamp = {
 
     val mapREGEX = REGEX.dataRegexMap(inputbox)
+    val sign = mapREGEX.get("sign")
 
     if (mapREGEX.get("now") != null)
       UDF.to_code("h",0)
     else if (mapREGEX.get("year") != null)
       UDF.to_date(inputbox)
     else if ( REGEX.isSign(mapREGEX.get("sign")) && REGEX.isNumeric(mapREGEX.get("number")) && REGEX.isField(mapREGEX.get("field")) )
-      UDF.to_code(mapREGEX.get("field").toString, mapREGEX.get("number").toInt)
+      UDF.to_code(mapREGEX.get("field").toString, (sign.concat(mapREGEX.get("number"))).toInt)
     else
       throw new IllegalArgumentException("\n\n -> Invalid timestamp: "+inputbox+".\n" +
         "Expected format: \n" +
         "\\n 1) Format 'yyyy-MM-dd HH:mm'" +
-        "\\n 2) The last '-#@' where # is number and @ is d: day, h: hour, m: minute, s: second" +
+        "\\n 2) The last '-#@' where # is number and @ is y: year, M: month, d: day, h: hour, m: minute, s: second" +
         "\\n 3) Keyword 'now'\n\n")
   }
 
