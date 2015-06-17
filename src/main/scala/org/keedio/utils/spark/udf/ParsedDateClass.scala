@@ -71,7 +71,11 @@ class ParsedDateClass {
     else if ( REGEX.isSign(mapREGEX.get("sign")) && REGEX.isNumeric(mapREGEX.get("number")) && REGEX.isField(mapREGEX.get("field")) )
       UDF.to_code(mapREGEX.get("field").toString, mapREGEX.get("number").toInt)
     else
-      throw new IllegalArgumentException("\n\n -> Invalid timestamp: "+inputbox+".\n\n Expected format: \n 1) yyyy-MM-dd HH:mm \n 2) The last '-#@' where # is number and @ is d: day, h: hour, m: minute, s: second \n 3) now\n\n")
+      throw new IllegalArgumentException("\n\n -> Invalid timestamp: "+inputbox+".\n" +
+        "Expected format: \n" +
+        "\\n 1) Format 'yyyy-MM-dd HH:mm'" +
+        "\\n 2) The last '-#@' where # is number and @ is d: day, h: hour, m: minute, s: second" +
+        "\\n 3) Keyword 'now'\n\n")
   }
 
 }
