@@ -76,26 +76,4 @@ class ParsedDateClass {
 
 }
 
-object MainParsedDate extends ParsedDateClass{
 
-  def main(args: Array[String]) {
-
-    val dateString = "2015-06-01 23:01"
-    val codeString = "-5h"
-    val codeActualString = "-0h"
-    val codeErrorString = "-h0"
-
-    println()
-    println("dateString:" + dateString + " -> " + parsedDate(dateString))
-    println()
-    println("codeString:" + codeString + " -> " + parsedDate(codeString))
-    println()
-    println("codeActualString:" + codeActualString + " -> " + parsedDate(codeActualString))
-    println()
-    println("now -> " + parsedDate("now"))
-    println()
-    println("codeErrorString:" + codeErrorString + " -> " + parsedDate(codeErrorString))
-
-    System.exit(0)
-  }
-}
