@@ -64,12 +64,14 @@ class ParsedDateClass {
 
     val mapREGEX = REGEX.dataRegexMap(inputbox)
 
-    if (mapREGEX.get("year") != null)
+    if (mapREGEX.get("now") != null)
+      UDF.to_code("h",0)
+    else if (mapREGEX.get("year") != null)
       UDF.to_date(inputbox)
     else if ( REGEX.isSign(mapREGEX.get("sign")) && REGEX.isNumeric(mapREGEX.get("number")) && REGEX.isField(mapREGEX.get("field")) )
       UDF.to_code(mapREGEX.get("field").toString, mapREGEX.get("number").toInt)
     else
-      throw new IllegalArgumentException("\n\nInvalid timestamp: "+"inputbox"+". Expected format: yyyy-MM-dd HH:mm\n\n")
+      throw new IllegalArgumentException("\n\n -> Invalid timestamp: "+inputbox+".\n\n Expected format: \n 1) yyyy-MM-dd HH:mm \n 2) The last '-#@' where # is number and @ is d: day, h: hour, m: minute, s: second \n 3) now\n\n")
   }
 
 }
@@ -89,6 +91,8 @@ object MainParsedDate extends ParsedDateClass{
     println("codeString:" + codeString + " -> " + parsedDate(codeString))
     println()
     println("codeActualString:" + codeActualString + " -> " + parsedDate(codeActualString))
+    println()
+    println("now -> " + parsedDate("now"))
     println()
     println("codeErrorString:" + codeErrorString + " -> " + parsedDate(codeErrorString))
 
