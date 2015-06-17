@@ -15,8 +15,18 @@ object REGEX {
 
   val configFactory = ConfigFactory.load("regex/regex.properties")
 
+  /**
+   * Compiles the given regular expression into a pattern.
+   *
+   * @return Pattern of Regular Expression
+   */
   def dataRegexPattern : Pattern = Pattern.compile(configFactory.getString("dateregex"))
 
+  /**
+   *
+   * @param inputbox -> Date with predefined format
+   * @return -> Map of parsed date
+   */
   def dataRegexMap(inputbox : String) : Map[String, String] = {
 
     dataRegexPattern.matcher(inputbox).find()
@@ -24,6 +34,12 @@ object REGEX {
 
   }
 
+  /**
+   * Check whether various fields of regex is the default setting
+   *
+   * @param inputbox
+   * @return Boolean
+   */
   def isSign(inputbox : String) : Boolean = {if(inputbox != null) true else false}
   def isNumeric(inputbox: String): Boolean = {if (inputbox != null) inputbox.forall(_.isDigit) else false}
   def isField(inputbox : String) : Boolean = List("y","M","d","h","m","s").contains(inputbox)
@@ -32,6 +48,11 @@ object REGEX {
 
 object UDF {
 
+  /**
+   *
+   * @param inputbox -> input's date as a String
+   * @return
+   */
   def to_date(inputbox : String) : Timestamp = {
 
     val dateFormated = new SimpleDateFormat("yyyy-MM-dd HH:mm")
@@ -39,6 +60,14 @@ object UDF {
 
   }
 
+  /**
+   *
+   * Function to convert the coding in a timestamp
+   *
+   * @param fieldCase -> y: year, M: month, d: day, h: hour, m: minute, s: second
+   * @param numberCase -> amount on measure of fieldCase
+   * @return Timestamp
+   */
   def to_code(fieldCase : String, numberCase : Int) : Timestamp = {
 
     val cal = java.util.Calendar.getInstance()
@@ -62,6 +91,21 @@ object UDF {
 
 trait ParsedDateClass {
 
+  /**
+   * This function parsed the date or codification to into
+   * The input are parsed using Regular Expression. The target name are:
+   *
+   * 1) Date: 'year', 'month', 'day', 'hour', 'minute'
+   *
+   * 2) Code: 'sign' -> '-' or '+'
+   *          'number'
+   *          'field' -> y: year, M: month, d: day, h: hour, m: minute, s: second
+   *
+   * 3) Keyword: 'now'
+   *
+   * @param inputbox
+   * @return Timestamp
+   */
   def parsedDate(inputbox : String) : Timestamp = {
 
     val mapREGEX = REGEX.dataRegexMap(inputbox)
