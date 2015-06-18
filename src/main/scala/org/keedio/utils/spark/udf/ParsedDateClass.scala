@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.Map
 import com.google.code.regexp.Pattern
 import com.typesafe.config.ConfigFactory
+import org.apache.spark.sql.SQLContext
 
 
 /**
@@ -49,6 +50,19 @@ object REGEX {
 object UDF {
 
   /**
+   * Register the functions to use in SQL's context
+   *
+   * @param sqlc
+   */
+  def registerUDF(sqlc: SQLContext) : Unit = {
+
+    sqlc.udf.register("parseDate", parseDate _)
+    sqlc.udf.register("to_code", to_code _)
+    sqlc.udf.register("parseDate", parseDate _)
+
+  }
+
+  /**
    *
    * @param inputbox -> input's date as a String
    * @return
@@ -87,10 +101,6 @@ object UDF {
 
   }
 
-}
-
-trait ParsedDateClass {
-
   /**
    * This function parsed the date or codification to into
    * The input are parsed using Regular Expression. The target name are:
@@ -106,7 +116,7 @@ trait ParsedDateClass {
    * @param inputbox
    * @return Timestamp
    */
-  def parsedDate(inputbox : String) : Timestamp = {
+  def parseDate(inputbox : String) : Timestamp = {
 
     val mapREGEX = REGEX.dataRegexMap(inputbox)
     val sign = mapREGEX.get("sign")
@@ -126,5 +136,3 @@ trait ParsedDateClass {
   }
 
 }
-
-
