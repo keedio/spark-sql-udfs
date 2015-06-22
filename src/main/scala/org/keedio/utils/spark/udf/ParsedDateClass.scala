@@ -4,7 +4,6 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Map
 import com.google.code.regexp.Pattern
-import com.typesafe.config.ConfigFactory
 import org.apache.spark.sql.SQLContext
 
 
@@ -14,14 +13,12 @@ import org.apache.spark.sql.SQLContext
 
 object REGEX {
 
-  val configFactory = ConfigFactory.load("regex/regex.properties")
-
   /**
    * Compiles the given regular expression into a pattern.
    *
    * @return Pattern of Regular Expression
    */
-  def dataRegexPattern : Pattern = Pattern.compile(configFactory.getString("dateregex"))
+  def dataRegexPattern : Pattern = Pattern.compile("(((?<year>[0-9]{1,4})(/|-)(?<month>[0-9]{1,2})(/|-)(?<day>[0-9]{1,2})) ((?<hour>[0-9]{1,2}):(?<minute>[0-9]{1,2})))|((?<sign>(-|(\\\\+))?)(?<number>[0-9]+)(?<field>(s|m|h|d|M|y)))|((?<now>(now)))")
 
   /**
    *
