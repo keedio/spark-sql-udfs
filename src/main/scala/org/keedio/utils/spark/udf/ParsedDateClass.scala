@@ -118,7 +118,7 @@ object UDF {
     val mapREGEX = REGEX.dataRegexMap(inputbox)
     val sign = mapREGEX.get("sign")
 
-    if (mapREGEX.get("now") != null)
+    if (mapREGEX.get("now") != null || mapREGEX.get("now") != "")
       UDF.to_code("h",0)
     else if (mapREGEX.get("year") != null)
       UDF.to_date(inputbox)
