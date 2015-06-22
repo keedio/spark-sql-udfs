@@ -127,9 +127,9 @@ object UDF {
     else
       throw new IllegalArgumentException("\n\n -> Invalid timestamp: "+inputbox+".\n" +
         "Expected format: \n" +
-        "\\n 1) Format 'yyyy-MM-dd HH:mm'" +
-        "\\n 2) The last '-#@' where # is number and @ is y: year, M: month, d: day, h: hour, m: minute, s: second" +
-        "\\n 3) Keyword 'now'\n\n")
+        "\\n 1) Date: 'yyyy-MM-dd HH:mm'" +
+        "\\n 2) Code: It's necessary sign, number and letter {y: year, M: month, d: day, h: hour, m: minute, s: second}. Example: '-24h' are the last 24 hours from now"  +
+        "\\n 3) Keyword: 'now'\n\n")
   }
 
 }
