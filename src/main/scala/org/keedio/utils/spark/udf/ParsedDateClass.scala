@@ -53,16 +53,6 @@ object REGEX {
 object UDF {
 
   /**
-   * This function concatenates a set of string.
-   *
-   * @param wordString : Multiple string as input
-   * @return Concatenated string
-   */
-  def concat(separator: String, wordString: String*): String = {
-    wordString filter (_.nonEmpty) mkString separator
-  }
-
-  /**
    * Register the functions to use in SQL's context
    *
    * @param sqlc
@@ -72,7 +62,20 @@ object UDF {
     sqlc.udf.register("to_date", to_date _)
     sqlc.udf.register("to_code", to_code _)
     sqlc.udf.register("parseDate", parseDate _)
+    sqlc.udf.register("aggregationDay", aggregationDay _)
+    sqlc.udf.register("to_hour", to_hour _)
+    sqlc.udf.register("concat", concat _)
 
+  }
+
+  /**
+   * This function concatenates a set of string.
+   *
+   * @param wordString : Multiple string as input
+   * @return Concatenated string
+   */
+  def concat(separator: String, wordString: String*): String = {
+    wordString filter (_.nonEmpty) mkString separator
   }
 
   /**
