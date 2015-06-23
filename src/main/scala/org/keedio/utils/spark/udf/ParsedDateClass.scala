@@ -59,12 +59,12 @@ object UDF {
    */
   def registerUDF(sqlc: SQLContext): Unit = {
 
+    sqlc.udf.register("concat", concat _)
     sqlc.udf.register("to_date", to_date _)
+    sqlc.udf.register("to_hour", to_hour _)
+    sqlc.udf.register("aggregationDay", aggregationDay _)
     sqlc.udf.register("to_code", to_code _)
     sqlc.udf.register("parseDate", parseDate _)
-    sqlc.udf.register("aggregationDay", aggregationDay _)
-    sqlc.udf.register("to_hour", to_hour _)
-    sqlc.udf.register("concat", concat _)
 
   }
 
