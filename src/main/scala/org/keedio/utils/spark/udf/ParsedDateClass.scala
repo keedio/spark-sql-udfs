@@ -144,4 +144,6 @@ object UDF {
         "\\n 3) Keyword: 'now'\n\n")
   }
 
+  def concatFunction(wordString: String*) : String = {wordString filter (_.nonEmpty) mkString " --> " }
+
 }
