@@ -79,7 +79,7 @@ object UDF {
   def to_hour(inputbox : String) : String = {
 
     val mapREGEX = REGEX.dataRegexMap(inputbox)
-    REGEX.isSign(mapREGEX.get("hour")).toString
+    mapREGEX.get("hour").toString
 
   }
 
