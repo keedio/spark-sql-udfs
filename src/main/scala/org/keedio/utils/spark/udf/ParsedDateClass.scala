@@ -144,6 +144,12 @@ object UDF {
         "\\n 3) Keyword: 'now'\n\n")
   }
 
+  /**
+   *This function concatenates a set of string
+   *
+   * @param wordString : Multiple string as input
+   * @return Concatenated string
+   */
   def concatFunction(wordString: String*) : String = {wordString filter (_.nonEmpty) mkString " --> " }
 
 }
