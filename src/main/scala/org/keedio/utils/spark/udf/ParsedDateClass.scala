@@ -73,6 +73,18 @@ object UDF {
 
   /**
    *
+   * @param inputbox : Date with format 'yyyy-MM-dd HH:mm'
+   * @return String with the hour 'HH'
+   */
+  def to_hour(inputbox : String) : String = {
+
+    val mapREGEX = REGEX.dataRegexMap(inputbox)
+    REGEX.isSign(mapREGEX.get("hour")).toString
+
+  }
+
+  /**
+   *
    * Function to convert the coding in a timestamp
    *
    * @param fieldCase -> y: year, M: month, d: day, h: hour, m: minute, s: second
