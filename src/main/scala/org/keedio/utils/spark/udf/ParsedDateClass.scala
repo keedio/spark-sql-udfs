@@ -145,7 +145,7 @@ object UDF {
   }
 
   /**
-   *This function concatenates a set of string
+   * This function concatenates a set of string.
    *
    * @param wordString : Multiple string as input
    * @return Concatenated string
