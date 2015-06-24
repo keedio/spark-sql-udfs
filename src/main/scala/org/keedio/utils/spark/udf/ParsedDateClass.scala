@@ -59,7 +59,7 @@ object UDF {
    */
   def registerUDF(sqlc: SQLContext): Unit = {
 
-    sqlc.udf.register("concatWithSeparator", concatWithSeparator _)
+    sqlc.udf.register("concatWithSeparator", (h:String, s:String*) => concatWithSeparator(h,s) )
     sqlc.udf.register("to_date", to_date _)
     sqlc.udf.register("to_hour", to_hour _)
     sqlc.udf.register("aggregationDay", aggregationDay _)
