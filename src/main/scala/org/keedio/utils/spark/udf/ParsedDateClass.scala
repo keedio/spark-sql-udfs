@@ -105,14 +105,13 @@ object UDF {
    * Only the date of Timestamp
    *
    * @param inputbox
-   * @param separator : as separate
    * @return Date with format 'yyyy-MM-dd'
    */
-  def aggregationDay(inputbox: String, separator: String): String = {
+  def aggregationDay(inputbox: String): String = {
 
     val mapR = REGEX.dataRegexMap(inputbox)
 
-    concatWithSeparator(separator,
+    concatWithSeparator("-",
       mapR.get("year").toString,
       mapR.get("month").toString,
       mapR.get("day").toString
