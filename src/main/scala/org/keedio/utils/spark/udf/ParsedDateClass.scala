@@ -93,12 +93,12 @@ object UDF {
 
   /**
    *
-   * @param inputbox : Date with format 'yyyy-MM-dd HH:mm'
+   * @param inputbox
    * @return String with the hour 'HH'
    */
-  def to_hour(inputbox: String) : String = {
+  def to_hour(inputbox: Timestamp) : String = {
 
-    REGEX.dataRegexMap(inputbox).get("hour").toString
+    REGEX.dataRegexMap(inputbox.toString).get("hour").toString
 
   }
 
@@ -108,9 +108,9 @@ object UDF {
    * @param inputbox
    * @return Date with format 'yyyy-MM-dd'
    */
-  def aggregationDay(inputbox: String): String = {
+  def aggregationDay(inputbox: Timestamp): String = {
 
-    val mapR = REGEX.dataRegexMap(inputbox)
+    val mapR = REGEX.dataRegexMap(inputbox.toString)
 
     concatWithSeparator("-",
       mapR.get("year").toString,
