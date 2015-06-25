@@ -170,7 +170,7 @@ object UDF {
     val mapREGEX = REGEX.dataRegexMap(inputbox)
     val sign = mapREGEX.get("sign")
 
-    if ( inputbox == null )
+    if ( inputbox == null || inputbox == "")
       UDF.to_code("h", 0)
     else if ( mapREGEX.get("now") != null )
       UDF.to_code("h", 0)
