@@ -59,9 +59,9 @@ object UDF {
    */
   def registerUDF(sqlc: SQLContext): Unit = {
 
-    //sqlc.udf.register("concatWithSeparator", (h: String, s1: String, s2: String) => concatWithSeparator(h,s1,s2) )
-    //sqlc.udf.register("concatWithSeparator", (h: String, s1: String, s2: String, s3: String) => concatWithSeparator(h,s1,s2,s3) )
-    sqlc.udf.register("concatWithSeparator", (h: String, s: Array[String]) => concatWithSeparator(h,s) )
+    sqlc.udf.register("concat2WithSeparator", (h: String, s1: String, s2: String) => concatWithSeparator(h,s1,s2) )
+    sqlc.udf.register("concat3WithSeparator", (h: String, s1: String, s2: String, s3: String) => concatWithSeparator(h,s1,s2,s3) )
+    sqlc.udf.register("concat4WithSeparator", (h: String, s1: String, s2: String, s3: String, s4: String) => concatWithSeparator(h,s1,s2,s3,s4) )
     sqlc.udf.register("to_date", to_date _)
     sqlc.udf.register("to_hour", to_hour _)
     sqlc.udf.register("aggregationDay", aggregationDay _)
@@ -76,10 +76,10 @@ object UDF {
    * @param wordString : Multiple string as input
    * @return Concatenated string
    */
-  //def concatWithSeparator(separator: String, wordString: String*): String = {
-  def concatWithSeparator(separator: String, wordString: Array[String]): String = {
+  def concatWithSeparator(separator: String, wordString: String*): String = {
 
     wordString filter (_.nonEmpty) mkString separator
+
   }
 
   /**
@@ -115,18 +115,11 @@ object UDF {
 
     val mapR = REGEX.dataRegexMap(inputbox.toString)
 
-    /*concatWithSeparator("-",
+    concatWithSeparator("-",
       mapR.get("year").toString,
       mapR.get("month").toString,
       mapR.get("day").toString
-    )*/
-
-    val mapRSeq = Array(mapR.get("year").toString,
-                    mapR.get("month").toString,
-                      mapR.get("day").toString
-      )
-
-    concatWithSeparator("-", mapRSeq)
+    )
 
   }
 
