@@ -121,10 +121,10 @@ object UDF {
       mapR.get("day").toString
     )*/
 
-    val mapRSeq : Seq[String] = [mapR.get("year").toString,
+    val mapRSeq = Array(mapR.get("year").toString,
                     mapR.get("month").toString,
                       mapR.get("day").toString
-                  ]
+      )
 
     concatWithSeparator("-", mapRSeq)
 
