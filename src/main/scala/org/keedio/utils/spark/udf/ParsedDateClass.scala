@@ -113,9 +113,9 @@ object UDF {
 
     val mapR = REGEX.dataRegexMap(inputbox.toString)
 
-    concat('-',
+    concat("-",
       mapR.get("year").toString,
-      concat('-',
+      concat("-",
       mapR.get("month").toString,
       mapR.get("day").toString)
     )
