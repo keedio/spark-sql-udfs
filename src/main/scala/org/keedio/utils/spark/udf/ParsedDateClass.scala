@@ -59,7 +59,7 @@ object UDF {
    */
   def registerUDF(sqlc: SQLContext): Unit = {
 
-    sqlc.udf.register[String,Char,String,String]("concat", concat)
+    sqlc.udf.register[String,String,String,String]("concat", concat)
     sqlc.udf.register("to_date", to_date _)
     sqlc.udf.register("to_hour", to_hour _)
     sqlc.udf.register("aggregationDay", aggregationDay _)
@@ -73,10 +73,10 @@ object UDF {
    *
    * @return Concatenated string
    */
-  def concat(separator:Char, e1: String = "", e2: String = ""): String = {
+  def concat(separator: String, e1: String = "", e2: String = ""): String = {
     val elems = List(e1,e2)
 
-    elems. filter (_.nonEmpty) mkString separator.toString
+    elems. filter (_.nonEmpty) mkString separator
 
   }
 
