@@ -50,6 +50,9 @@ object REGEX {
 
 object UDF {
 
+  val dateFormated = new SimpleDateFormat("yyyy-MM-dd HH:mm")
+  val cal = java.util.Calendar.getInstance()
+
   /**
    * Register the functions to use in SQL's context
    *
@@ -85,7 +88,6 @@ object UDF {
    */
   def to_date(inputbox: String): Timestamp = {
 
-    val dateFormated = new SimpleDateFormat("yyyy-MM-dd HH:mm")
     new Timestamp(dateFormated.parse(inputbox).getTime())
 
   }
@@ -129,8 +131,6 @@ object UDF {
    * @return Timestamp
    */
   def to_code(fieldCase: String, numberCase: Int): Timestamp = {
-
-    val cal = java.util.Calendar.getInstance()
 
     fieldCase match {
 

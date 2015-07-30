@@ -38,10 +38,10 @@ class AssertionTest {
   @Test
   def concat$Test() = {
 
-    val s : String = "s-1-2-t"
+    val s : String = "s-2-t"
 
     Assert.assertEquals(s, UDF.concat("-","s",UDF.concat("-","2","t")))
-    Assert.assertTrue("\n\nString length is not the correct: "+ s.length +" \n\n", s.length == 7)
+    Assert.assertTrue("\n\nString length is not the correct: "+ s.length +" \n\n", s.length == 5)
 
   }
 
