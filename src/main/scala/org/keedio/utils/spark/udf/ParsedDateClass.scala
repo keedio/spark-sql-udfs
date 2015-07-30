@@ -4,6 +4,7 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Map
 import com.google.code.regexp.Pattern
+import org.apache.log4j.Logger
 import org.apache.spark.sql.SQLContext
 import scala.util.DynamicVariable
 
@@ -50,8 +51,16 @@ object REGEX {
 
 object UDF {
 
+  val logger = Logger.getLogger("KeedioUDF")
+
   val dateFormated = new SimpleDateFormat("yyyy-MM-dd HH:mm")
-  val cal = java.util.Calendar.getInstance()
+
+  /**
+   * parsed date cache
+   */
+  val parsedDateCache : scala.collection.mutable.Map[String, Timestamp] =
+    scala.collection.mutable.Map[String, Timestamp]()
+
 
   /**
    * Register the functions to use in SQL's context
@@ -59,7 +68,7 @@ object UDF {
    * @param sqlc
    */
   def registerUDF(sqlc: SQLContext): Unit = {
-
+    logger.info("registering UDFs")
     sqlc.udf.register[String,String,String,String]("concat", concat)
     sqlc.udf.register("to_date", to_date _)
     sqlc.udf.register("to_hour", to_hour _)
@@ -131,6 +140,8 @@ object UDF {
    * @return Timestamp
    */
   def to_code(fieldCase: String, numberCase: Int): Timestamp = {
+    logger.info(s"to_code: $fieldCase, $numberCase")
+    val cal = java.util.Calendar.getInstance()
 
     fieldCase match {
 
@@ -146,6 +157,7 @@ object UDF {
     new Timestamp(cal.getTimeInMillis)
 
   }
+
 
   /**
    * This function parsed the date or codification to into
@@ -163,24 +175,31 @@ object UDF {
    * @return Timestamp
    */
   def parseDate(inputbox: String): Timestamp = {
+    if (parsedDateCache.contains(inputbox)){
+      parsedDateCache(inputbox)
+    } else {
 
-    val mapREGEX = REGEX.dataRegexMap(inputbox)
-    val sign = mapREGEX.get("sign")
+      val mapREGEX = REGEX.dataRegexMap(inputbox)
+      val sign = mapREGEX.get("sign")
 
-    if ( inputbox == null || inputbox == "")
-      UDF.to_code("h", 0)
-    else if ( mapREGEX.get("now") != null )
-      UDF.to_code("h", 0)
-    else if ( mapREGEX.get("year") != null )
-      UDF.to_date(inputbox)
-    else if ( REGEX.isSign(mapREGEX.get("sign")) && REGEX.isNumeric(mapREGEX.get("number")) && REGEX.isField(mapREGEX.get("field")))
-      UDF.to_code(mapREGEX.get("field").toString, (sign.concat(mapREGEX.get("number"))).toInt )
-    else
-      throw new IllegalArgumentException("\n\n -> Invalid timestamp: " + inputbox + ".\n" +
-        "Expected format: \n" +
-        "\\n 1) Date: 'yyyy-MM-dd HH:mm'" +
-        "\\n 2) Code: It's necessary sign, number and letter {y: year, M: month, d: day, h: hour, m: minute, s: second}. Example: '-24h' are the last 24 hours from now" +
-        "\\n 3) Keyword: 'now'\n\n")
+      val ts = if ( inputbox == null || inputbox == "")
+        UDF.to_code("h", 0)
+      else if ( mapREGEX.get("now") != null )
+        UDF.to_code("h", 0)
+      else if ( mapREGEX.get("year") != null )
+        UDF.to_date(inputbox)
+      else if ( REGEX.isSign(mapREGEX.get("sign")) && REGEX.isNumeric(mapREGEX.get("number")) && REGEX.isField(mapREGEX.get("field")))
+        UDF.to_code(mapREGEX.get("field").toString, (sign.concat(mapREGEX.get("number"))).toInt )
+      else
+        throw new IllegalArgumentException("\n\n -> Invalid timestamp: " + inputbox + ".\n" +
+          "Expected format: \n" +
+          "\\n 1) Date: 'yyyy-MM-dd HH:mm'" +
+          "\\n 2) Code: It's necessary sign, number and letter {y: year, M: month, d: day, h: hour, m: minute, s: second}. Example: '-24h' are the last 24 hours from now" +
+          "\\n 3) Keyword: 'now'\n\n")
+
+      parsedDateCache.put(inputbox, ts)
+
+      ts
+    }
   }
-
 }
