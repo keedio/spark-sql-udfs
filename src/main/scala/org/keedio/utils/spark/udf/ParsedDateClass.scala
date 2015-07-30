@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.Map
 import com.google.code.regexp.Pattern
 import org.apache.spark.sql.SQLContext
+import scala.util.DynamicVariable
 
 
 /**
@@ -13,12 +14,9 @@ import org.apache.spark.sql.SQLContext
 
 object REGEX {
 
-  /**
-   * Compiles the given regular expression into a pattern.
-   *
-   * @return Pattern of Regular Expression
-   */
-  def dataRegexPattern: Pattern = Pattern.compile("(((?<year>[0-9]{1,4})(/|-)(?<month>[0-9]{1,2})(/|-)(?<day>[0-9]{1,2})) ((?<hour>[0-9]{1,2}):(?<minute>[0-9]{1,2})))|((?<sign>(-|(\\+))?)(?<number>[0-9]+)(?<field>(s|m|h|d|M|y)))|((?<now>(now|^$)))")
+  // DynamicVariables provide a binding mechanism where the current value is found through dynamic scope, but where access to the variable itself is resolved through static scope.
+  val dataRegexPattern: Pattern = Pattern.compile("(((?<year>[0-9]{1,4})(/|-)(?<month>[0-9]{1,2})(/|-)(?<day>[0-9]{1,2})) ((?<hour>[0-9]{1,2}):(?<minute>[0-9]{1,2})))|((?<sign>(-|(\\+))?)(?<number>[0-9]+)(?<field>(s|m|h|d|M|y)))|((?<now>(now|^$)))")
+  val dv = new DynamicVariable[Pattern](dataRegexPattern)
 
   /**
    *
@@ -27,8 +25,8 @@ object REGEX {
    */
   def dataRegexMap(inputbox: String): Map[String, String] = {
 
-    dataRegexPattern.matcher(inputbox).find()
-    dataRegexPattern.matcher(inputbox).namedGroups()
+    dv.value.matcher(inputbox).find()
+    dv.value.matcher(inputbox).namedGroups()
 
   }
 
