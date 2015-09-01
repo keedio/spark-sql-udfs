@@ -175,6 +175,8 @@ object UDF {
    * @return Timestamp
    */
   def parseDate(inputbox: String): Timestamp = {
+    logger.info(s"parseDate currentThread: ${Thread.currentThread().getName}")
+
     if (parsedDateCache.contains(inputbox)){
       parsedDateCache(inputbox)
     } else {
