@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat
 import java.util.Map
 import com.google.code.regexp.Pattern
 import org.apache.log4j.Logger
+import org.apache.spark.Logging
+import org.apache.spark.scheduler.{SparkListenerJobEnd, SparkListenerJobStart, SparkListener}
 import org.apache.spark.sql.SQLContext
 import scala.util.DynamicVariable
 
@@ -49,9 +51,22 @@ object REGEX {
 
 }
 
+case class UDFListener() extends SparkListener with Logging{
+  log.info("Initializing UDFListener")
+
+  override def onJobEnd(jobEnd: SparkListenerJobEnd): Unit = {
+    log.info(s"UDFListener onJobEnd: ${jobEnd.jobId}")
+  }
+
+  override def onJobStart(jobStart: SparkListenerJobStart): Unit = {
+    log.info(s"UDFListener onJobStart: ${jobStart.jobId}")
+    UDF.parsedDateCache.clear
+  }
+}
+
 object UDF {
 
-  val logger = Logger.getLogger("KeedioUDF")
+  val logger = Logger.getLogger(this.getClass)
 
   val dateFormated = new SimpleDateFormat("yyyy-MM-dd HH:mm")
 
@@ -76,6 +91,7 @@ object UDF {
     sqlc.udf.register("to_code", to_code _)
     sqlc.udf.register("parseDate", parseDate _)
 
+    sqlc.sparkContext.addSparkListener(UDFListener())
   }
 
   /**
@@ -175,8 +191,6 @@ object UDF {
    * @return Timestamp
    */
   def parseDate(inputbox: String): Timestamp = {
-    logger.info(s"parseDate currentThread: ${Thread.currentThread().getName}")
-
     if (parsedDateCache.contains(inputbox)){
       parsedDateCache(inputbox)
     } else {
